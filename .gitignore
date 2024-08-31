@@ -67,3 +67,5 @@ build-iPhoneSimulator/
 /.idea/url_shortener_ruby.iml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/.mise.toml
+/.sequel
