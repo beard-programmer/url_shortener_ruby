@@ -1,0 +1,43 @@
+
+# We want Exclude directives from different
+# config files to get merged, not overwritten
+inherit_mode:
+  merge:
+    - Exclude
+
+require:
+  # Standard's config uses custom cops,
+  # so it must be loaded along with custom Standard gems
+  # rubocop-performance is required when using Performance cops
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-sequel
+  - rubocop-rspec
+  - rubocop-yard
+
+
+AllCops:
+  TargetRubyVersion: 3.3.4  # Example Ruby version
+  Exclude:
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - './bundle/**/*'
+
+Style/StringLiterals:
+  # Rules specific to Gemfile
+  EnforcedStyle: double_quotes
+  Include:
+    - 'Gemfile'
+
+Style/WordArray:
+  EnforcedStyle: brackets
+Style/YodaCondition:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 20
+Style/Documentation:
+  Enabled: false
+Style/Alias:
+  Enabled: false
+
+
