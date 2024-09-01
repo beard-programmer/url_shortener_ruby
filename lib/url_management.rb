@@ -2,5 +2,6 @@
 
 module UrlManagement
   require_relative './result'
+  require_relative './url_management/infrastructure'
   require_relative './url_management/encode'
 end
