@@ -5,7 +5,7 @@ require_relative './token_host'
 
 module UrlManagement
   module Encode
-    class UnclaimedTokenStandard
+    class TokenStandard
       private_class_method :new
 
       attr_reader :token, :token_key, :token_host

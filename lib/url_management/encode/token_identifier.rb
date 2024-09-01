@@ -4,7 +4,7 @@ require_relative '../simple_types'
 
 module UrlManagement
   module Encode
-    class UnclaimedIdentifier
+    class TokenIdentifier
       private_class_method :new
 
       # @ return [Integer]

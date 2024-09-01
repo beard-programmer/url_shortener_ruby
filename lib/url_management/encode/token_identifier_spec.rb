@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'rspec'
-require_relative './unclaimed_identifier'
+require_relative './token_identifier'
 require_relative './errors'
 
-RSpec.describe UrlManagement::Encode::UnclaimedIdentifier do
+RSpec.describe UrlManagement::Encode::TokenIdentifier do
   describe '.acquire' do
     subject { described_class.acquire(ticket_service) }
 

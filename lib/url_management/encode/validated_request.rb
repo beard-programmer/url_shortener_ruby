@@ -14,7 +14,7 @@ module UrlManagement
       # @todo: mb parse into separate?
       def self.from_unvalidated_request(parse_original_url, url:, encode_at_host: nil)
         result = parse_original_url.call(url).and_then do |encode_what|
-          encode_where = EncodingHost.from_string(encode_at_host).unwrap_or(EncodingHost::EncodingHostDefault.new)
+          encode_where = TokenHost.from_string(encode_at_host).unwrap_or(TokenHostStandard.new)
 
           case [encode_what.host, encode_where.host]
           in [left, right] if left == right

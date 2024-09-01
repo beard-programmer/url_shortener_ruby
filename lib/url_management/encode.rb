@@ -4,7 +4,7 @@ module UrlManagement
   module Encode
     require_relative './encode/errors'
     require_relative './encode/encode'
-    require_relative './encode/unclaimed_identifier'
+    require_relative './encode/token_identifier'
     require_relative './encode/api'
     require_relative './encode/original_url'
     require_relative './encode/token_host'

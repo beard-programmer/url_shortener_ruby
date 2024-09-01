@@ -2,16 +2,16 @@
 
 require 'rspec'
 require_relative './errors'
-require_relative './unclaimed_token_standard'
-require_relative './unclaimed_identifier'
+require_relative './token_standard'
+require_relative './token_identifier'
 require_relative '../infrastructure/codec_base58'
 
-RSpec.describe UrlManagement::Encode::UnclaimedTokenStandard do
+RSpec.describe UrlManagement::Encode::TokenStandard do
   describe '.issue' do
     subject(:issue_result) { described_class.issue(codec, unclaimed_identifier, token_host) }
 
     let(:codec) { UrlManagement::Infrastructure::CodecBase58 }
-    let(:unclaimed_identifier) { instance_double(UrlManagement::Encode::UnclaimedIdentifier, value: 58**5) }
+    let(:unclaimed_identifier) { instance_double(UrlManagement::Encode::TokenIdentifier, value: 58**5) }
     let(:token_host) { UrlManagement::Encode::TokenHostStandard.new }
 
     it 'is ok' do
