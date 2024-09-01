@@ -15,7 +15,7 @@ module UrlManagement
       req = Rack::Request.new(env)
       if req.post? || req.put? || req.patch?
         begin
-          request.body.rewind
+          req.body.rewind
           body = req.body.read
           JSON::Validator.validate!(@schema, body)
           env['rack.input'] = StringIO.new(body) # Rewind the input stream
