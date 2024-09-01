@@ -9,8 +9,6 @@ gem "rackup", "~> 2.1"
 
 gem "sinatra", "~> 4.0"
 
-gem "rspec", "~> 3.13"
-
 gem "pg", "~> 1.5"
 
 gem "rake", "~> 13.2"
@@ -26,6 +24,11 @@ group :development do
   gem "rubocop-sequel", "~> 0.3.4", require: false
   gem "rubocop-yard", "~> 0.9.3", require: false
   gem "yard", "~> 0.9.36", require: false # Docs
+end
+
+group :test do
+  gem "rack-test", "~> 2.1"
+  gem "rspec", "~> 3.13"
 end
 
 gem "sequel", "~> 5.83"
