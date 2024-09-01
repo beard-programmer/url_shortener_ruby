@@ -2,14 +2,40 @@
 
 class Result
   class Ok < Result
-    def Ok.[](value)
+    def self.[](value)
       new(value)
+    end
+
+    # Deconstructs the value for pattern matching.
+    #
+    # @return [Array]
+    def deconstruct
+      if value.nil?
+        []
+      elsif value.is_a?(Array)
+        value.to_a
+      else
+        [value]
+      end
     end
   end
 
   class Err < Result
-    def Err.[](value)
+    def self.[](value)
       new(value)
+    end
+
+    # Deconstructs the value for pattern matching.
+    #
+    # @return [Array]
+    def deconstruct
+      if value.nil?
+        []
+      elsif value.is_a?(Array)
+        value.to_a
+      else
+        [value]
+      end
     end
   end
 
@@ -43,6 +69,14 @@ class Result
     value
   end
 
+  # @param [Object] default
+  # @return [Object]
+  def unwrap_or(default)
+    return default if err?
+
+    value
+  end
+
   # @return [Object]
   # @raise [RuntimeError]
   def unwrap_err!
@@ -54,7 +88,7 @@ class Result
   # @yield [value]
   # @yieldparam value [Object]
   # @yieldreturn [Object]
-  # @return [Result<Object>]
+  # @return [Result, Result::Ok<Object>]
   def map
     return self if err?
 
@@ -64,7 +98,7 @@ class Result
   # @yield [error]
   # @yieldparam error [Object]
   # @yieldreturn [Object]
-  # @return [Result]
+  # @return [Result, Result::Err]
   def map_err
     return self if ok?
 
@@ -73,8 +107,8 @@ class Result
 
   # @yield [value]
   # @yieldparam value [Object]
-  # @yieldreturn [Result]
-  # @return [Result]
+  # @yieldreturn [Result, Result::Ok<Object>, Result::Err<Object>]
+  # @return [Result, Result::Ok<Object>, Result::Err<Object>]
   def and_then
     return self if err?
 
@@ -92,13 +126,13 @@ class Result
   end
 
   # @param value [Object]
-  # @return [Result::Ok<Object>]
+  # @return [Result::Ok]
   def self.ok(value)
     Ok[value]
   end
 
-  # @param error [Object]
-  # @return [Result::Err<Object>]
+  # @param [Object] value
+  # @return [Result::Err]
   def self.err(value)
     Err[value]
   end

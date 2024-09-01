@@ -24,8 +24,8 @@ RSpec.describe UrlManagement::Encode::ValidatedRequest do
         expect(result.ok?).to be(true)
         validated_request = result.unwrap!
         expect(validated_request).to be_a(described_class)
-        expect(validated_request.encode_what.host).to eq('example.com')
-        expect(validated_request.encode_where.host).to eq('short.est')
+        expect(validated_request.original_url.host).to eq('example.com')
+        expect(validated_request.token_host.host).to eq('short.est')
       end
     end
 

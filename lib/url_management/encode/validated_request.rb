@@ -3,7 +3,7 @@
 module UrlManagement
   module Encode
     class ValidatedRequest
-      attr_reader :encode_what, :encode_where
+      attr_reader :original_url, :token_host
 
       private_class_method :new
 
@@ -20,18 +20,18 @@ module UrlManagement
           in [left, right] if left == right
             Result.err 'Cannot encode self'
           else
-            Result.ok new(encode_what:, encode_where:)
+            Result.ok new(original_url: encode_what, token_host: encode_where)
           end
         end
 
         result.map_err { |e| ValidationError.new(e) }
       end
 
-      # @param [OriginalUrl] encode_what
-      # @param [#host, #to_s, #domain] encode_where
-      def initialize(encode_what:, encode_where:)
-        @encode_what = encode_what
-        @encode_where = encode_where
+      # @param [OriginalUrl] original_url
+      # @param [#host, #to_s, #domain] token_host
+      def initialize(original_url:, token_host:)
+        @original_url = original_url
+        @token_host = token_host
       end
     end
   end

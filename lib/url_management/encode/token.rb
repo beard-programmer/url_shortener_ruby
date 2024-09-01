@@ -13,7 +13,7 @@ module UrlManagement
         case token_host
         in TokenHostStandard then TokenStandard.issue(codec, unclaimed_identifier, token_host)
         else
-          Result.err NotImplementedError.new
+          Result.err NotImplementedError.new 'Only Standard tokens are supported!'
         end
       end
     end

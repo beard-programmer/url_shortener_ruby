@@ -2,7 +2,7 @@
 
 require 'rspec'
 require 'rack/test'
-require_relative './api'
+require_relative '../encode'
 
 RSpec.describe UrlManagement::Encode::Api do
   include Rack::Test::Methods
@@ -21,10 +21,10 @@ RSpec.describe UrlManagement::Encode::Api do
       end
 
       it "returns a short_url in the response" do
-        post '/encode', valid_json, { "CONTENT_TYPE" => "application/json" }
+        post '/encode', valid_json, { "CONTENT_TYPE" => "applicationr/json" }
         response_data = JSON.parse(last_response.body)
         expect(response_data["short_url"]).to be_a(String)
-        expect(response_data["short_url"]).to match(%r{https://short\.est/\h{12}})
+        expect(response_data["short_url"]).to match(%r{https://short\.est/[1-9A-HJ-NP-Za-km-z]{6}})
       end
 
       it "returns the original url in the response" do
