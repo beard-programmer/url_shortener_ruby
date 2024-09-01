@@ -1,30 +1,31 @@
 # frozen_string_literal: true
 
 require 'rspec'
-require_relative './encoding_token_unclaimed'
+require_relative './unclaimed_identifier'
 require_relative './errors'
 
-RSpec.describe UrlManagement::Encode::EncodingTokenUnclaimed do
-  describe '.issue' do
+RSpec.describe UrlManagement::Encode::UnclaimedIdentifier do
+  describe '.acquire' do
+    subject { described_class.acquire(ticket_service) }
+
     context 'when token_producer succeeds and produces a valid integer' do
       let(:valid_integer) { 58**5 }
-      let(:token_producer) { -> { Result.ok(valid_integer) } }
+      let(:ticket_service) { -> { Result.ok(valid_integer) } }
 
-      it 'returns a Result::Ok with an EncodeTokenUnclaimed' do
-        result = described_class.issue(token_producer)
+      it 'returns a Result::Ok with an UnclaimedIdentifier' do
+        result = subject
 
         expect(result.ok?).to be(true)
         expect(result.unwrap!).to be_a(described_class)
-        expect(result.unwrap!.value).to be_a(UrlManagement::SimpleTypes::IntegerBase58Exp5To6)
-        expect(result.unwrap!.value.value).to eq(58**5)
+        expect(result.unwrap!.value).to eq(58**5)
       end
     end
 
-    context 'when token_producer fails' do
-      let(:token_producer) { -> { Result.err('Some infrastructure error') } }
+    context 'when ticket_service fails' do
+      let(:ticket_service) { -> { Result.err('Some infrastructure error') } }
 
       it 'returns a Result::Err with an InfrastructureError' do
-        result = described_class.issue(token_producer)
+        result = subject
 
         expect(result.err?).to be(true)
         expect(result.unwrap_err!).to be_a(UrlManagement::Encode::InfrastructureError)
@@ -33,11 +34,11 @@ RSpec.describe UrlManagement::Encode::EncodingTokenUnclaimed do
     end
 
     [nil, 15.5, "wtf"].each do |not_integer|
-      context 'when produced not an integer' do
-        let(:token_producer) { -> { Result.ok(not_integer) } }
+      context 'when ticket service returned not an integer' do
+        let(:ticket_service) { -> { Result.ok(not_integer) } }
 
         it 'returns a Result::Err with an ApplicationError' do
-          result = described_class.issue(token_producer)
+          result = subject
 
           expect(result.err?).to be(true)
           expect(result.unwrap_err!).to be_a(UrlManagement::Encode::ApplicationError)
@@ -47,11 +48,11 @@ RSpec.describe UrlManagement::Encode::EncodingTokenUnclaimed do
     end
 
     [-100, 0, 58**6].each do |invalid_integer|
-      context 'when the integer produced is invalid according to IntegerBase58Exp5To6' do
-        let(:token_producer) { -> { Result.ok(invalid_integer) } }
+      context 'when ticket service gave integer that is invalid according to IntegerBase58Exp5To6' do
+        let(:ticket_service) { -> { Result.ok(invalid_integer) } }
 
         it 'returns a Result::Err with an ApplicationError' do
-          result = described_class.issue(token_producer)
+          result = subject
 
           expect(result.err?).to be(true)
           expect(result.unwrap_err!).to be_a(UrlManagement::Encode::ApplicationError)
