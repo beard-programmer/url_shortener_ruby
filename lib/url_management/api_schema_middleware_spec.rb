@@ -1,7 +1,8 @@
-# spec/url_management/api_schema_middleware_spec.rb
+# frozen_string_literal: true
+
 require 'rack/mock'
 require 'json-schema'
-require_relative '../../lib/url_management/api_schema_middleware'
+require_relative './api_schema_middleware'
 
 RSpec.describe UrlManagement::ApiSchemaMiddleware do
   let(:app) { ->(_env) { [200, { 'Content-Type' => 'application/json' }, ['OK']] } }
