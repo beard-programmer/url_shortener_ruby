@@ -5,7 +5,6 @@ require 'rspec'
 require_relative './errors'
 require_relative './validated_request'
 require_relative './original_url'
-require_relative './encode_on_host'
 require_relative '../infrastructure' # for parse_url_string
 
 RSpec.describe UrlManagement::Encode::ValidatedRequest do
