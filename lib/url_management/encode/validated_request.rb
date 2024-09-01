@@ -11,6 +11,7 @@ module UrlManagement
       # @param [String, nil] url
       # @param [String, nil] encode_at_host
       # @return [Result::Ok<self>, Result::Err<ValidationError>]
+      # @todo: mb parse into separate?
       def self.from_unvalidated_request(parse_original_url, url:, encode_at_host: nil)
         result = parse_original_url.call(url).and_then do |encode_what|
           encode_where = EncodeOnHost.from_string(encode_at_host).unwrap_or(EncodeOnHost.default)
