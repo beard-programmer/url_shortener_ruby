@@ -2,13 +2,13 @@
 
 require 'rspec'
 require 'rack/test'
-require_relative './encode_api'
+require_relative './api'
 
-RSpec.describe UrlManagement::EncodeApi do
+RSpec.describe UrlManagement::Encode::Api do
   include Rack::Test::Methods
 
   def app
-    UrlManagement::EncodeApi.new
+    described_class.new
   end
 
   describe "POST /encode" do

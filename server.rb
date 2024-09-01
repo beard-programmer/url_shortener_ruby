@@ -5,16 +5,29 @@ unless defined?(Bundler)
   Bundler.require
 end
 
-# Define the Sinatra application class
-class Server < Sinatra::Base
-  # Use middleware or handlers
-  # use encode_handler
-  # use decode_handler
+require "logger"
+require "yaml"
 
-  # Optional: Set some Sinatra configurations if needed
-  configure do
-    set :show_exceptions, false
-  end
+environment = ENV["APP_ENV"] || "development"
+db_config = YAML.load_file("config/database.yml")
+
+logger = Logger.new($stdout, level: Logger::DEBUG)
+db = Sequel.connect(
+  db_config[environment],
+  logger:,
+  log_connection_info: true,
+  sql_log_level: :debug
+) # raises in failure
+
+require_relative './lib/url_management'
+
+UrlManagement::Encode::Api.set(db:, logger:, default_content_type: :json, show_exceptions: false)
+
+class Server < Sinatra::Base
+  use Rack::RewindableInput::Middleware
+  use Sinatra::CommonLogger, UrlManagement::Encode::Api.settings.logger
+
+  use UrlManagement::Encode::Api
 
   # Define a simple route for the root path (optional)
   get '/' do
