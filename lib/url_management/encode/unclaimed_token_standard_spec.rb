@@ -2,12 +2,11 @@
 
 require 'rspec'
 require_relative './errors'
-require_relative './unclaimed_token'
 require_relative './unclaimed_token_standard'
 require_relative './unclaimed_identifier'
 require_relative '../infrastructure/codec_base58'
 
-RSpec.describe UrlManagement::Encode::UnclaimedToken do
+RSpec.describe UrlManagement::Encode::UnclaimedTokenStandard do
   describe '.issue' do
     subject(:issue_result) { described_class.issue(codec, unclaimed_identifier, token_host) }
 
@@ -19,19 +18,20 @@ RSpec.describe UrlManagement::Encode::UnclaimedToken do
       expect(issue_result).to be_ok
     end
 
-    it 'is a StandardUnclaimedToken' do
-      expect(issue_result.unwrap!).to be_a(UrlManagement::Encode::UnclaimedTokenStandard)
+    it 'is standard token' do
+      expect(issue_result.unwrap!).to be_a(described_class)
+    end
+
+    it 'is an expected value' do
+      token = issue_result.unwrap!
+      expect([token.token, token.token_key, token.token_host]).to eq(["211111", 58**5, token_host])
     end
 
     context 'when given unexpected encoding host' do
       let(:token_host) { 123 }
 
-      it 'is err' do
-        expect(issue_result).to be_err
-      end
-
-      it 'is not implemented' do
-        expect(issue_result.unwrap_err!).to be_instance_of(NotImplementedError)
+      it 'is raises error' do
+        expect { issue_result }.to raise_error(ArgumentError)
       end
     end
   end
