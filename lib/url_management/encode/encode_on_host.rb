@@ -11,7 +11,7 @@ module UrlManagement
         new(host: 'short.est')
       end
 
-      # @param [String] host
+      # @param [String, nil] host
       # @return [Result::Ok<self>, Result::Err<ValidationError>]
       def self.from_string(host)
         case host

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# spec/url_management/encode/original_url_spec.rb
-
 require 'rspec'
 require_relative './errors'
 require_relative '../infrastructure' # for parse_url_string
