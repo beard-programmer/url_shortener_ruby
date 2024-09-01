@@ -5,3 +5,9 @@ development:
   host: localhost
   database: url_shortener_ruby_development
 
+test:
+  adapter: postgres
+  user: url_shortener_ruby_test
+  password: url_shortener_ruby_test
+  host: localhost
+  database: url_shortener_ruby_test

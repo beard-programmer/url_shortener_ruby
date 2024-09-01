@@ -9,7 +9,16 @@ services:
       POSTGRES_DB: url_shortener_ruby_development
     ports:
       - "5432:5432"
-
+  test_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: url_shortener_ruby_test
+      POSTGRES_PASSWORD: url_shortener_ruby_test
+      POSTGRES_DB: url_shortener_ruby_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
   web:
     build: .
     volumes:
@@ -24,4 +33,4 @@ services:
       DATABASE_URL: postgres://url_shortener_ruby_development:url_shortener_ruby_development@localhost:5432/url_shortener_ruby_development
 volumes:
   db_data:
-
+  test_postgres_data:

@@ -2,16 +2,39 @@
 
 require 'rspec'
 require 'rack/test'
+require 'logger'
 require_relative '../encode'
 
 RSpec.describe UrlManagement::Encode::Api do
   include Rack::Test::Methods
 
   def app
-    described_class.new
+    described_class.set(db:, logger: Logger.new(nil), default_content_type: :json, show_exceptions: false)
   end
 
   describe "POST /encode" do
+    let(:db) do
+      # Connect to the test database
+      test_db = Sequel.connect(ENV['DATABASE_URL'] || 'postgres://url_shortener_ruby_test:url_shortener_ruby_test@localhost:5433/url_shortener_ruby_test')
+
+      # Run database migrations
+      Sequel.extension :migration
+      Sequel::Migrator.run(test_db, './lib/db/migrations')
+
+      # Return the database connection
+      test_db
+    end
+
+    before do
+      db[:encoded_urls].truncate(cascade: true)
+    end
+
+    after do
+      Sequel.extension :migration
+      Sequel::Migrator.run(db, "lib/db/migrations", target: 0)
+      db.disconnect
+    end
+
     context "with valid input" do
       let(:valid_json) { { url: "https://example.com" }.to_json }
 
