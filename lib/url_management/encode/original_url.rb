@@ -15,6 +15,8 @@ module UrlManagement
             Result.err "Invalid domain for host #{uri.host}"
           in [scheme, _] unless ['http', 'https'].include? scheme
             Result.err "Invalid scheme #{scheme}"
+          in _ if 255 < uri.to_s.size
+            Result.err "Url is too long! Max 255."
           else
             url = new(uri:)
             Result.ok url

@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: url_shortener_ruby_development
+      POSTGRES_PASSWORD: url_shortener_ruby_development
+      POSTGRES_DB: url_shortener_ruby_development
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "4567:4567"
+    depends_on:
+      - db
+    environment:
+      APP_ENV: development
+      SECRET_KEY_BASE: mysecretkey
+      DATABASE_URL: postgres://url_shortener_ruby_development:url_shortener_ruby_development@localhost:5432/url_shortener_ruby_development
+volumes:
+  db_data:
+

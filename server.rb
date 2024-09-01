@@ -9,15 +9,18 @@ require "logger"
 require "yaml"
 
 environment = ENV["APP_ENV"] || "development"
-db_config = YAML.load_file("config/database.yml")
+db_config = YAML.load_file("lib/config/database.yml")
 
 logger = Logger.new($stdout, level: Logger::DEBUG)
+Sequel.extension :migration
 db = Sequel.connect(
   db_config[environment],
   logger:,
   log_connection_info: true,
   sql_log_level: :debug
 ) # raises in failure
+
+Sequel::Migrator.check_current(db, './lib/db/migrations')
 
 require_relative './lib/url_management'
 
@@ -29,11 +32,9 @@ class Server < Sinatra::Base
 
   use UrlManagement::Encode::Api
 
-  # Define a simple route for the root path (optional)
   get '/' do
     'URL Management Service'
   end
 
-  # Start the application if this file is run directly
   run! if app_file == $0
 end

@@ -2,7 +2,7 @@
 
 module UrlManagement
   module Encode
-    def self.call(ticket_service, url:, encode_at_host: nil)
+    def self.call(ticket_service, persist, url:, encode_at_host: nil)
       validate_request = ValidatedRequest.from_unvalidated_request(
         ->(string) { UrlManagement::Encode::OriginalUrl.from_string(UrlManagement::Infrastructure, string) },
         url:,
@@ -23,9 +23,8 @@ module UrlManagement
         EncodedUrl.to_encoded_url(url: request.original_url, token:)
       end
 
-      save_encoded_url = encode_url.and_then do |_encoded_url|
-        # Save to db
-        Result.ok nil
+      save_encoded_url = encode_url.and_then do |encoded_url|
+        persist.call(encoded_url)
       end
 
       return save_encoded_url if save_encoded_url.err?

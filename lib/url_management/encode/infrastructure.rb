@@ -1,18 +1,34 @@
 # frozen_string_literal: true
 
+require 'sequel'
+
 module UrlManagement
   module Encode
     module Infrastructure
       class TokenSystemError < StandardError; end
 
       # @param [Sequel::Database, #get] db
-      # @return [Ok<Integer>]
-      # @return [Err<TicketSystemError>]
+      # @return [Result::Ok<Integer>, Result::Err<TokenSystemError>]
+      # Very predictable. Can have multiple sequences with some big step
+      # @todo: forbid setval.
       def self.produce_unique_integer(db)
-        f = Sequel.function(:nextval, 'token_system.token_sequence')
-        Ok[db.get(f)]
+        f = Sequel.function(:nextval, 'identity_system.token_identifier')
+        Result.ok db.get(f)
       rescue Sequel::Error => e
-        Err[TokenSystemError.new(e)]
+        Result.err TokenSystemError.new(e)
+      end
+
+      class DatabaseError < StandardError; end
+
+      # @param [Sequel::Database, #insert] db
+
+      def self.save_encoded_url(db, encoded_url)
+        return Result.err DatabaseError.new unless encoded_url.is_a? UrlManagement::Encode::EncodedUrlStandard
+
+        db[:encoded_urls].insert(token_identifier: encoded_url.token.token_key, url: encoded_url.url.to_s)
+        Result.ok true
+      rescue Sequel::Error => e
+        Result.err DatabaseError.new(e.detailed_message)
       end
     end
   end

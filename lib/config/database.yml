@@ -1,0 +1,7 @@
+development:
+  adapter: postgres
+  user: url_shortener_ruby_development
+  password: url_shortener_ruby_development
+  host: localhost
+  database: url_shortener_ruby_development
+

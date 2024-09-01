@@ -24,6 +24,12 @@ module UrlManagement
         }
       )
 
+      helpers do
+        def database
+          settings.db
+        end
+      end
+
       post '/encode' do
         content_type :json
 
@@ -31,7 +37,8 @@ module UrlManagement
         request_hash = JSON.parse(body, symbolize_names: true)
 
         result = Encode.call(
-          -> { Result.ok SecureRandom.random_number(58**5..58**6) },
+          -> { Infrastructure.produce_unique_integer(database) },
+          ->(url) { Infrastructure.save_encoded_url(database, url) },
           url: request_hash[:url]
         )
 
