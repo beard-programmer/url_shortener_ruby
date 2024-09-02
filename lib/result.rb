@@ -39,12 +39,20 @@ class Result
     end
   end
 
+  # @param value [Object]
+  # @return [Result::Ok]
+  def self.ok(value)
+    Ok[value]
+  end
+
+  # @param [Object] value
+  # @return [Result::Err]
+  def self.err(value)
+    Err[value]
+  end
+
   # @!visibility private
   private_class_method :new
-
-  # @!attribute [r] value
-  #   @return [Object]
-  private attr_reader :value
 
   # @param value [Object]
   def initialize(value)
@@ -125,15 +133,9 @@ class Result
     yield(value)
   end
 
-  # @param value [Object]
-  # @return [Result::Ok]
-  def self.ok(value)
-    Ok[value]
-  end
+  private
 
-  # @param [Object] value
-  # @return [Result::Err]
-  def self.err(value)
-    Err[value]
-  end
+  # @!attribute [r] value
+  #   @return [Object]
+  attr_reader :value
 end

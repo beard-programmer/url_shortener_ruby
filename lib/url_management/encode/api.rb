@@ -14,6 +14,7 @@ module UrlManagement
             "url": {
               "type": "string",
               "minLength": 10,
+              "maxLength": 255,
               "description": ""
 
             }

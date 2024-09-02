@@ -18,8 +18,7 @@ module UrlManagement
         Result.ok encoded
       end
 
-      # @param [#to_str] encoded_string
-      # @param [String] encoded_string
+      # @param [String, #to_str] encoded_string
       # @return [Result::Ok<Integer>, Result::Err<TypeError, ArgumentError>]
       def self.decode(encoded_string = '')
         return Result.err TypeError.new(encoded_string) unless encoded_string.respond_to? :to_str

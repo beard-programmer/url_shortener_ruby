@@ -3,8 +3,6 @@
 module UrlManagement
   module Encode
     class OriginalUrl
-      private_class_method :new
-
       # @param [#parse_url_string] parser
       # @param [String] url_string
       # @return [Result::Ok<self>, Result::Err<ValidationError>]
@@ -33,11 +31,15 @@ module UrlManagement
         uri.to_s
       end
 
-      private attr_reader :uri
+      private_class_method :new
 
       def initialize(uri:)
         @uri = uri
       end
+
+      private
+
+      attr_reader :uri
     end
   end
 end
