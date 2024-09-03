@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-require 'rspec'
 require 'rack/test'
 require 'logger'
-require_relative '../encode'
+require 'sequel'
+require_relative '../../../spec_helper'
+require_relative '../../../../lib/url_management/encode/api'
 
 RSpec.describe UrlManagement::Encode::Api do
   include Rack::Test::Methods

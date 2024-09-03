@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require 'rspec'
-
-require_relative './errors'
-require_relative './validated_request'
-require_relative './original_url'
-require_relative '../infrastructure' # for parse_url_string
+require_relative '../../../spec_helper'
 
 RSpec.describe UrlManagement::Encode::ValidatedRequest do
   let(:parse_original_url) do

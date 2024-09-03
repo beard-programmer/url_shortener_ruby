@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../simple_types'
-require_relative './token_host'
+require_relative '../../common/result'
+require_relative './token_host_standard'
 require_relative './token_standard'
 
 module UrlManagement

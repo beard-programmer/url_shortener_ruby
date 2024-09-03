@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../../common/result'
 require_relative '../simple_types'
+require_relative './errors'
 
 module UrlManagement
   module Encode

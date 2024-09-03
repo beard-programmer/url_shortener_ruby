@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../spec/spec_helper'
-require_relative './result'
+require_relative '../../spec_helper'
 
 RSpec.describe Result do
   describe '.ok' do

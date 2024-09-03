@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../common/result'
+
 module UrlManagement
   module Infrastructure
     module CodecBase58

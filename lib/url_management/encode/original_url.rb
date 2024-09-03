@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../../common/result'
+require_relative './errors'
+
 module UrlManagement
   module Encode
     class OriginalUrl

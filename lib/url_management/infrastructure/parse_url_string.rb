@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+require 'addressable'
+require_relative '../../common/result'
+
 module UrlManagement
   module Infrastructure
-    require 'addressable'
-
     class ParsingError < StandardError; end
 
     # @param url_string [String] The URL string to be parsed.

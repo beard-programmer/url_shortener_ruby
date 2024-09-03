@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../result'
-
 module UrlManagement
   module Encode
     class TokenHostStandard

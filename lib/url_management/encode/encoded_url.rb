@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../../common/result'
+require_relative './original_url'
+require_relative './token_host_standard'
 require_relative './encoded_url_standard'
 
 module UrlManagement

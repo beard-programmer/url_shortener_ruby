@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 require "sinatra/base"
-require_relative '../api_schema_middleware'
+require_relative '../../common/api_schema_middleware'
+require_relative '../encode'
+require_relative './infrastructure'
 
 module UrlManagement
   module Encode
     class Api < Sinatra::Base
       use(
-        UrlManagement::ApiSchemaMiddleware,
+        ApiSchemaMiddleware,
         {
           "type": "object",
           "properties": {

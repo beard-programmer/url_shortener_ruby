@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'rspec'
-require 'addressable'
-require_relative '../infrastructure'
+require_relative '../../../spec_helper'
 
 RSpec.describe UrlManagement::Infrastructure do
   describe '.parse_url_string' do

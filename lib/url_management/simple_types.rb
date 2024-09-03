@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../result'
-require_relative '../constrained_types'
+require_relative '../common/constrained_types'
 
 module UrlManagement
   module SimpleTypes
@@ -18,7 +17,7 @@ module UrlManagement
       # @param [Integer] value
       # @return [Result::Ok<IntegerBase58Exp5To6>, Result::Err<CreateIntegerError>]
       def self.from_integer(value)
-        create_integer(value, type_name: 'IntegerBase58Exp5To6', size_range: (MIN_VALID..MAX_VALID)) { |i| new(i) }
+        create_integer(value, type_name: name, size_range: (MIN_VALID..MAX_VALID)) { |i| new(i) }
       end
 
       # @param [Integer] value
@@ -36,7 +35,7 @@ module UrlManagement
       def self.from_string(value)
         pattern = /^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$/
         create_string(
-          value, type_name: 'StringBase58Exp5To6', length_range: (6...7), pattern:
+          value, type_name: name, length_range: (6...7), pattern:
         ) { |s| new(s) }
       end
 

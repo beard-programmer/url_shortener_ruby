@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'rspec'
-require_relative './token_identifier'
-require_relative './errors'
+require_relative '../../../spec_helper'
 
 RSpec.describe UrlManagement::Encode::TokenIdentifier do
   describe '.acquire' do
