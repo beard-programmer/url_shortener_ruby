@@ -2,11 +2,12 @@
 
 require_relative '../common/result'
 require_relative './infrastructure'
+require_relative './original_url'
+require_relative './token_identifier'
 require_relative './decode/errors'
 require_relative './decode/validated_request'
 require_relative './decode/token'
-require_relative './decode/fetch_encoded_url'
-require_relative './original_url'
+require_relative './decode/infrastructure'
 
 module UrlManagement
   module Decode
@@ -19,38 +20,35 @@ module UrlManagement
     # @param [DecodeRequest] request
     # @return [Result::Ok<DecodedUrlWasNotFound, DecodedUrlWasFound>]
     # @return [Result::Err<ValidationError, InfrastructureError>]
+    # @raise [RuntimeError]
     def call(db, request)
-      short_url = request.short_url
-      case build_token_identity(short_url)
+      case find_original_url_string(db, request)
+      in Result::Ok[encoded_url_string]
+        Result.ok DecodedUrlWasFound.new(url: to_original_url.call(encoded_url_string).unwrap!,
+                                         short_url: request.short_url)
+      in Result::Ok[] then Result.ok DecodedUrlWasNotFound.new(request.short_url)
+      in Result::Err[Infrastructure::DatabaseError => e] then Result.err InfrastructureError.new(e)
       in Result::Err[e] then Result.err ValidationError.new(e)
-      in Result::Ok[token_identity]
-        case FetchEncodedUrl.by_token_identifier(db, token_identity)
-        in Result::Ok[value]
-          # If for some reason original URL from datasource is invalid - either code is broken or data is not trusted.
-          # It is exceptional and unexpected so we fail in runtime.
-          url = to_original_url.call(value).unwrap!.to_s
-          Result.ok DecodedUrlWasFound.new(url:, short_url:)
-        in Result::Ok[] then Result.ok DecodedUrlWasNotFound.new(short_url)
-        in Result::Err[e] then Result.err InfrastructureError.new(e)
-        else raise "Unexpected response when fetching encoded url."
-        end
-      else raise "Unexpected response when building token identity from #{short_url}"
+      else raise "Unexpected response when fetching encoded url."
       end
     end
 
     private
 
-    def string_to_uri
-      ->(s) { UrlManagement::Infrastructure.parse_url_string(s) }
+    def find_original_url_string(db, request)
+      validate_request = ValidatedRequest.from_unvalidated_request(string_to_uri, request:)
+      make_token_identifier = validate_request.and_then do |validated_request|
+        decode_string = ->(s) { UrlManagement::Infrastructure::CodecBase58.decode(s) }
+        UrlManagement::TokenIdentifier.from_string(decode_string, validated_request.short_url.path[1..])
+      end
+
+      make_token_identifier.and_then do |token_identifier|
+        Infrastructure.find_encoded_url(db, token_identifier)
+      end
     end
 
-    def build_token_identity(short_url)
-      decode = ->(s) { UrlManagement::Infrastructure::CodecBase58.decode(s) }
-      to_token = ->(url) { Token.from_short_url_standard(decode, url) }
-      ValidatedRequest.from_unvalidated_request(string_to_uri, short_url:)
-                      .map(&:short_url)
-                      .and_then(&to_token)
-                      .map(&:token_identity)
+    def string_to_uri
+      ->(s) { UrlManagement::Infrastructure.parse_url_string(s) }
     end
 
     def to_original_url

@@ -9,8 +9,8 @@ module UrlManagement
 
       private_class_method :new
 
-      def self.from_unvalidated_request(string_to_uri, short_url:)
-        result = string_to_uri.call(short_url).and_then { |uri| ShortUrl.from_uri(uri) }
+      def self.from_unvalidated_request(string_to_uri, request:)
+        result = string_to_uri.call(request.short_url).and_then { |uri| ShortUrl.from_uri(uri) }
 
         result.map { |url| new(short_url: url) }
       end

@@ -21,7 +21,7 @@ module UrlManagement
       class DatabaseError < StandardError; end
 
       # @param [Sequel::Database, #insert] db
-
+      # @param [Object] encoded_url
       def self.save_encoded_url(db, encoded_url)
         return Result.err DatabaseError.new unless encoded_url.is_a? UrlManagement::Encode::EncodedUrlStandard
 
