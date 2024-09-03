@@ -4,7 +4,7 @@ require_relative '../../../spec_helper'
 
 RSpec.describe UrlManagement::Encode::Token do
   describe '.issue' do
-    subject(:issue_result) { described_class.issue(codec, unclaimed_identifier, token_host) }
+    subject(:issue_result) { described_class.from_token_identifier(codec, unclaimed_identifier, token_host) }
 
     let(:codec) { UrlManagement::Infrastructure::CodecBase58 }
     let(:unclaimed_identifier) { instance_double(UrlManagement::Encode::TokenIdentifier, value: 58**5) }

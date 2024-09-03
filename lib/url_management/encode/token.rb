@@ -9,9 +9,9 @@ module UrlManagement
     module Token
       module_function
 
-      def issue(codec, unclaimed_identifier, token_host)
+      def from_token_identifier(codec, token_identifier, token_host)
         case token_host
-        in TokenHostStandard then TokenStandard.issue(codec, unclaimed_identifier, token_host)
+        in TokenHostStandard then TokenStandard.from_token_identifier(codec, token_identifier, token_host)
         else
           Result.err NotImplementedError.new 'Only Standard tokens are supported!'
         end

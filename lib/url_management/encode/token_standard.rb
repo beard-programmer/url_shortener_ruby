@@ -10,9 +10,11 @@ module UrlManagement
     class TokenStandard
       private_class_method :new
 
+      # @todo: token_key -> token_identifier
+      # @todo: token -> token_key
       attr_reader :token, :token_key, :token_host
 
-      def self.issue(codec, token_identifier, token_host)
+      def self.from_token_identifier(codec, token_identifier, token_host)
         result = codec.encode(token_identifier.value).and_then do |s|
           UrlManagement::SimpleTypes::StringBase58Exp5To6.from_string(s)
         end

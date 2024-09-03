@@ -4,7 +4,7 @@ require_relative '../../../spec_helper'
 
 RSpec.describe UrlManagement::Encode::ValidatedRequest do
   let(:parse_original_url) do
-    ->(url) { UrlManagement::Encode::OriginalUrl.from_string(UrlManagement::Infrastructure, url) }
+    ->(url) { UrlManagement::OriginalUrl.from_string(UrlManagement::Infrastructure.method(:parse_url_string), url) }
   end
 
   describe '.from_unvalidated_request' do

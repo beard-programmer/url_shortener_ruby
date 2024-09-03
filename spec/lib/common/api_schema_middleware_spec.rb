@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../spec_helper'
+require_relative '../../../lib/common/api_schema_middleware'
 
 RSpec.describe ApiSchemaMiddleware do
   let(:app) { ->(_env) { [200, { 'Content-Type' => 'application/json' }, ['OK']] } }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './original_url'
+require_relative '../original_url'
 require_relative './token_standard'
 
 module UrlManagement
@@ -11,7 +11,7 @@ module UrlManagement
       attr_reader :url, :token
 
       def self.to_encoded_url!(url:, token:)
-        raise ArgumentError unless [url, token] in [OriginalUrl, TokenStandard]
+        raise ArgumentError unless [url, token] in [UrlManagement::OriginalUrl, TokenStandard]
 
         new(url:, token:)
       end

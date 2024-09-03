@@ -31,7 +31,7 @@ module UrlManagement
         result.map_err { |e| ValidationError.new(e) }
       end
 
-      # @param [OriginalUrl] original_url
+      # @param [UrlManagement::OriginalUrl] original_url
       # @param [#host, #to_s, #domain] token_host
       def initialize(original_url:, token_host:)
         @original_url = original_url
@@ -40,13 +40,3 @@ module UrlManagement
     end
   end
 end
-
-#     # .....
-#     # ValidatedRequest(original_url, host)
-#     # issue token (from db only)
-#     # we have token, validated_url, validated_token_host
-#     # apply token (produce key) token++host = key(string, host)
-#     # associate url with key #background
-#     #
-#   end
-# end
