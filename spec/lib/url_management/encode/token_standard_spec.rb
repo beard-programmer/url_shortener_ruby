@@ -7,7 +7,7 @@ RSpec.describe UrlManagement::Encode::TokenStandard do
     subject(:issue_result) { described_class.from_token_identifier(codec, unclaimed_identifier, token_host) }
 
     let(:codec) { UrlManagement::Infrastructure::CodecBase58 }
-    let(:unclaimed_identifier) { instance_double(UrlManagement::Encode::TokenIdentifier, value: 58**5) }
+    let(:unclaimed_identifier) { instance_double(UrlManagement::TokenIdentifier, value: 58**5) }
     let(:token_host) { UrlManagement::Encode::TokenHostStandard.new }
 
     it 'is ok' do

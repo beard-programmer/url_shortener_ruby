@@ -3,7 +3,7 @@
 require_relative './original_url'
 require_relative './infrastructure'
 require_relative './encode/validated_request'
-require_relative './encode/token_identifier'
+require_relative './token_identifier'
 require_relative './encode/token'
 require_relative './encode/encoded_url'
 
@@ -21,7 +21,7 @@ module UrlManagement
       return validate_request if validate_request.err?
 
       request = validate_request.unwrap!
-      issue_token = TokenIdentifier.acquire(ticket_service).and_then do |identifier|
+      issue_token = UrlManagement::TokenIdentifier.acquire(ticket_service).and_then do |identifier|
         Token.from_token_identifier(
           UrlManagement::Infrastructure::CodecBase58,
           identifier,
