@@ -6,7 +6,7 @@ require_relative './errors'
 
 module UrlManagement
   module Encode
-    class ValidatedRequest
+    class RequestValidated
       attr_reader :original_url, :token_host
 
       private_class_method :new

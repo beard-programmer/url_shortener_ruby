@@ -6,18 +6,23 @@ require_relative './encode/api'
 
 module UrlManagement
   class Api < Sinatra::Base
+    helpers do
+      def db = settings.db
+    end
+
     before do
       content_type :json
       request.body.rewind
     end
 
     post '/decode' do
-      response = Decode::Api.handle_http(db: settings.db, logger: settings.logger, body: request.body.read)
+      response = Decode::Api.handle_http(db:, logger:, body: request.body.read)
       [response.http_status_code, response.body]
     end
 
     post '/encode' do
-      Encode::Api.handle(request.body.read, settings.db, settings.logger)
+      response = Encode::Api.handle_http(db:, logger:, body: request.body.read)
+      [response.http_status_code, response.body]
     end
 
     get '/' do

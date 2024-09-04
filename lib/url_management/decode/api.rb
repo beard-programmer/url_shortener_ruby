@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../decode'
-require_relative './decode_request'
+require_relative './request'
 require_relative './api/http_response'
 
 module UrlManagement
@@ -14,10 +14,11 @@ module UrlManagement
       # @param [String] body
       # @return [HttpResponse]
       def handle_http(db:, logger:, body:)
-        decode_request = DecodeRequest.from_json(body)
+        logger.info body
+        decode_request = Request.from_json(body)
 
         result = decode_request.and_then do |request|
-          Decode.call(db, request)
+          Decode.call(db, request:)
         end
 
         HttpResponse.from_decode_result(result)

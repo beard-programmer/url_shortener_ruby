@@ -2,7 +2,7 @@
 
 require_relative './original_url'
 require_relative './infrastructure'
-require_relative './encode/validated_request'
+require_relative './encode/request_validated'
 require_relative './token_identifier'
 require_relative './encode/token'
 require_relative './encode/encoded_url'
@@ -11,9 +11,13 @@ module UrlManagement
   module Encode
     module_function
 
-    def call(ticket_service, persist, url:, encode_at_host: nil)
+    UrlWasEncoded = Data.define(:url, :short_url)
+
+    def call(ticket_service, persist, request:)
+      url = request.url
+      encode_at_host = request.encode_at_host
       string_to_url = ->(s) { UrlManagement::Infrastructure.parse_url_string(s) }
-      validate_request = ValidatedRequest.from_unvalidated_request(
+      validate_request = RequestValidated.from_unvalidated_request(
         ->(string) { UrlManagement::OriginalUrl.from_string(string_to_url, string) },
         url:,
         encode_at_host:
@@ -39,7 +43,11 @@ module UrlManagement
 
       return save_encoded_url if save_encoded_url.err?
 
-      encode_url
+      encode_url.map do |encoded_url|
+        token = encoded_url.token
+        short_url = "https://#{token.token_host}/#{token.token}"
+        UrlWasEncoded[encoded_url.url.to_s, short_url]
+      end
     end
   end
 end

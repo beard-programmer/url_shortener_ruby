@@ -2,11 +2,11 @@
 
 require 'json-schema'
 require_relative '../../common/result'
-require_relative '../decode/errors'
+require_relative './errors'
 
 module UrlManagement
   module Decode
-    class DecodeRequest
+    class Request
       private_class_method :new
       attr_reader :short_url
 
@@ -28,7 +28,7 @@ module UrlManagement
         }.freeze
 
       # @param [String] body
-      # @return [Result::Ok<DecodeRequest>, Result::Err<ValidationError>]
+      # @return [Result::Ok<Request>, Result::Err<ValidationError>]
       def self.from_json(body)
         metaschema = JSON::Validator.validator_for_name("draft4").metaschema
         JSON::Validator.validate!(metaschema, JSON_SCHEMA)

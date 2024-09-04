@@ -4,7 +4,7 @@ require_relative './short_url'
 
 module UrlManagement
   module Decode
-    class ValidatedRequest
+    class RequestValidated
       attr_reader :short_url
 
       private_class_method :new

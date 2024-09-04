@@ -5,7 +5,7 @@ require_relative './infrastructure'
 require_relative './original_url'
 require_relative './token_identifier'
 require_relative './decode/errors'
-require_relative './decode/validated_request'
+require_relative './decode/request_validated'
 require_relative './decode/infrastructure'
 
 module UrlManagement
@@ -16,12 +16,12 @@ module UrlManagement
     OriginalWasNotFound = Data.define(:short_url)
 
     # @param [Sequel::Database] db
-    # @param [DecodeRequest] request
+    # @param [Request] request
     # @return [Result::Ok<DecodedUrlWasNotFound, ShortUrlDecoded>]
     # @return [Result::Err<ValidationError, InfrastructureError>]
     # @raise [RuntimeError]
-    def call(db, request)
-      case find_original_url_string(db, request)
+    def call(db, request:)
+      case find_original_url_string(db, request:)
       in Result::Ok[encoded_url_string]
         Result.ok ShortUrlDecoded.new(url: to_original_url.call(encoded_url_string).unwrap!,
                                       short_url: request.short_url)
@@ -34,8 +34,8 @@ module UrlManagement
 
     private
 
-    def find_original_url_string(db, request)
-      validate_request = ValidatedRequest.from_unvalidated_request(string_to_uri, request:)
+    def find_original_url_string(db, request:)
+      validate_request = RequestValidated.from_unvalidated_request(string_to_uri, request:)
       make_token_identifier = validate_request.and_then do |validated_request|
         decode_string = ->(s) { UrlManagement::Infrastructure::CodecBase58.decode(s) }
         UrlManagement::TokenIdentifier.from_string(decode_string, validated_request.short_url.path[1..])

@@ -2,7 +2,7 @@
 
 require_relative '../../../spec_helper'
 
-RSpec.describe UrlManagement::Encode::ValidatedRequest do
+RSpec.describe UrlManagement::Encode::RequestValidated do
   let(:parse_original_url) do
     ->(url) { UrlManagement::OriginalUrl.from_string(UrlManagement::Infrastructure.method(:parse_url_string), url) }
   end
