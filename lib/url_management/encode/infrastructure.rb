@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 require 'sequel'
+require_relative '../../common/result'
+require_relative '../infrastructure'
 
 module UrlManagement
   module Encode
     module Infrastructure
+      def self.codec_base58 = UrlManagement::Infrastructure::CodecBase58
+      def self.parse_url_string(...) = UrlManagement::Infrastructure.parse_url_string(...)
+
       class TokenSystemError < StandardError; end
 
       # @param [Sequel::Database, #get] db

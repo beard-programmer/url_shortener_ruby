@@ -10,16 +10,15 @@ module UrlManagement
     # @param url_string [String] The URL string to be parsed.
     # @return [Result, Result::Ok<URI>, Result::Err<ParsingError>]
     def self.parse_url_string(url_string)
-      raise ArgumentError, "Too long." if 2048 < url_string.size
+      return Result.err(ParsingError.new("URL must be string.")) unless url_string.respond_to?(:to_str)
+      return Result.err(ParsingError.new("URL too long.")) if 2048 < url_string.length
 
       parsed = Addressable::URI.parse(url_string)
-      if parsed
-        Result.ok parsed
-      else
-        Result.err ParsingError.new
-      end
+      return Result.ok(parsed) if parsed
+
+      Result.err(ParsingError.new("Failed to parse URL"))
     rescue NoMethodError, TypeError, ArgumentError, Addressable::URI::InvalidURIError => e
-      Result.err ParsingError.new(e.detailed_message)
+      Result.err(ParsingError.new(e.message))
     end
   end
 end

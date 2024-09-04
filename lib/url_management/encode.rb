@@ -16,9 +16,8 @@ module UrlManagement
     def call(ticket_service, persist, request:)
       url = request.url
       encode_at_host = request.encode_at_host
-      string_to_url = ->(s) { UrlManagement::Infrastructure.parse_url_string(s) }
       validate_request = RequestValidated.from_unvalidated_request(
-        ->(string) { UrlManagement::OriginalUrl.from_string(string_to_url, string) },
+        ->(string) { UrlManagement::OriginalUrl.from_string(Infrastructure.method(:parse_url_string), string) },
         url:,
         encode_at_host:
       )
@@ -27,7 +26,7 @@ module UrlManagement
       request = validate_request.unwrap!
       issue_token = UrlManagement::TokenIdentifier.acquire(ticket_service).and_then do |identifier|
         Token.from_token_identifier(
-          UrlManagement::Infrastructure::CodecBase58,
+          Infrastructure.codec_base58,
           identifier,
           request.token_host
         )

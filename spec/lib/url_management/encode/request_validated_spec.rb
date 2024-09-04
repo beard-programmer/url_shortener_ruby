@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../../../spec_helper'
+require_relative '../../../../lib/url_management/encode/infrastructure'
 
 RSpec.describe UrlManagement::Encode::RequestValidated do
   let(:parse_original_url) do
-    ->(url) { UrlManagement::OriginalUrl.from_string(UrlManagement::Infrastructure.method(:parse_url_string), url) }
+    lambda { |url|
+      UrlManagement::OriginalUrl.from_string(UrlManagement::Encode::Infrastructure.method(:parse_url_string), url)
+    }
   end
 
   describe '.from_unvalidated_request' do
