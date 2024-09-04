@@ -69,3 +69,4 @@ build-iPhoneSimulator/
 /.idea/workspace.xml
 /.mise.toml
 /.sequel
+/vendor/
