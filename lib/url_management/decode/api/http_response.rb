@@ -14,9 +14,9 @@ module UrlManagement
 
         def self.from_decode_result(result)
           case result
-          in Result::Ok[UrlManagement::Decode::DecodedUrlWasFound[url:, short_url:]]
+          in Result::Ok[UrlManagement::Decode::ShortUrlDecoded[url:, short_url:]]
             new(200, { url:, short_url: }.to_json)
-          in Result::Ok[UrlManagement::Decode::DecodedUrlWasNotFound[short_url]]
+          in Result::Ok[UrlManagement::Decode::OriginalWasNotFound[short_url]]
             new(
               422,
               { error: { code: 'DecodedUrlWasNotFound',

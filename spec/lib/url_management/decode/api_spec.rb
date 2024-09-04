@@ -114,7 +114,7 @@ RSpec.describe UrlManagement::Decode::Api do
             expect(api_response.http_status_code).to eq(200)
           end
 
-          it 'is ValidationError' do
+          it 'is correct short + original' do
             expect(api_response.body).to eq({ url: example[:original_url],
                                               short_url: example[:body][:short_url] }.to_json)
           end
@@ -128,11 +128,6 @@ RSpec.describe UrlManagement::Decode::Api do
         token_identifier: 656_356_837,
         invalid_original_url: 'FTP://github.com/sinatra/sinatra-recipes/blob/main/middleware/rack_parser.md'
       }
-      # {
-      #   body: { short_url: "https://short.est/21112C" },
-      #   token_identifier: 656_356_837,
-      #   invalid_original_url: "https://short.est/21112C"
-      # }
     ].each do |example|
       context 'when crippled data sneaked into db' do
         before do
@@ -141,10 +136,8 @@ RSpec.describe UrlManagement::Decode::Api do
 
         let(:body) { example[:body].to_json }
 
-        context do
-          it 'raises runtime error' do
-            expect { api_response }.to raise_error(RuntimeError)
-          end
+        it 'raises runtime error' do
+          expect { api_response }.to raise_error(RuntimeError)
         end
       end
     end

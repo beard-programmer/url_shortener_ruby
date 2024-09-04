@@ -7,7 +7,7 @@ RSpec.describe UrlManagement::Decode::Api::HttpResponse do
     let(:short_url) { "https://short.url" }
 
     context 'when the result is Ok with DecodedUrlWasFound' do
-      let(:result) { Result.ok(UrlManagement::Decode::DecodedUrlWasFound.new(found_url, short_url)) }
+      let(:result) { Result.ok(UrlManagement::Decode::ShortUrlDecoded.new(found_url, short_url)) }
 
       it 'returns a 200 status with the correct body' do
         response = described_class.from_decode_result(result)
@@ -17,7 +17,7 @@ RSpec.describe UrlManagement::Decode::Api::HttpResponse do
     end
 
     context 'when the result is Ok with DecodedUrlWasNotFound' do
-      let(:result) { Result.ok(UrlManagement::Decode::DecodedUrlWasNotFound.new(short_url)) }
+      let(:result) { Result.ok(UrlManagement::Decode::OriginalWasNotFound.new(short_url)) }
 
       it 'returns a 422 status with an error message' do
         response = described_class.from_decode_result(result)
