@@ -11,7 +11,7 @@ module UrlManagement
   module Encode
     module_function
 
-    UrlWasEncoded = Data.define(:url, :short_url)
+    UrlWasEncoded = Data.define(:url, :short_host, :short_token)
 
     def call(ticket_service, persist, request:)
       url = request.url
@@ -44,8 +44,7 @@ module UrlManagement
 
       encode_url.map do |encoded_url|
         token = encoded_url.token
-        short_url = "https://#{token.token_host}/#{token.token}"
-        UrlWasEncoded[encoded_url.url.to_s, short_url]
+        UrlWasEncoded[encoded_url.url.to_s, token.token_host.to_s, token.token.to_s]
       end
     end
   end

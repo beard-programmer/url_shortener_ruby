@@ -8,6 +8,7 @@ module UrlManagement
   class Api < Sinatra::Base
     helpers do
       def db = settings.db
+      def event_publisher = settings.event_publisher
     end
 
     before do
@@ -16,12 +17,12 @@ module UrlManagement
     end
 
     post '/decode' do
-      response = Decode::Api.handle_http(db:, logger:, body: request.body.read)
+      response = Decode::Api.handle_http(db:, event_publisher:, logger:, body: request.body.read)
       [response.http_status_code, response.body]
     end
 
     post '/encode' do
-      response = Encode::Api.handle_http(db:, logger:, body: request.body.read)
+      response = Encode::Api.handle_http(db:, event_publisher:, logger:, body: request.body.read)
       [response.http_status_code, response.body]
     end
 

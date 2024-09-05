@@ -13,13 +13,19 @@ module UrlManagement
       # @param [Logger] logger
       # @param [String] body
       # @return [HttpResponse]
-      def handle_http(db:, logger:, body:)
-        logger.info body
+      # @param [Object] event_publisher
+      def handle_http(db:, event_publisher:, logger:, body:)
         decode_request = Request.from_json(body)
 
         result = decode_request.and_then do |request|
           Decode.call(db, request:)
         end
+
+        # event_publisher.subscribe('UrlManagement::Decode::ShortUrlDecoded', add_to_cache)
+        #
+        # if result in Result::Ok[ShortUrlDecoded => event]
+        #   event_publisher.publish(event)
+        # end
 
         HttpResponse.from_decode_result(result)
       end

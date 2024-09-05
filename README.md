@@ -50,7 +50,7 @@ ShortLink is a URL shortening service where you enter a URL such as https://code
 ## Decode Endpoint API
 
 **URL**: `POST /decode`
-
+curl -i -X POST http://localhost:4567/decode -H "Content-Type: application/json" -d "{\"short_url\":\"https://short.est/123\"}"
 **Request Body**
 ```json5
 {

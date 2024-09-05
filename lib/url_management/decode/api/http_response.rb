@@ -13,9 +13,15 @@ module UrlManagement
         attr_reader :http_status_code, :body
 
         def self.from_decode_result(result)
+          #    OriginalFoundInCache = Data.define(:url, :short_url_host, :short_url_token)
+          #     ShortUrlDecoded = Data.define(:url, :short_url_host, :short_url_token)
+          #     OriginalWasNotFound = Data.define(:short_url)
+
           case result
-          in Result::Ok[UrlManagement::Decode::ShortUrlDecoded[url:, short_url:]]
-            new(200, { url:, short_url: }.to_json)
+          in Result::Ok[UrlManagement::Decode::ShortUrlDecoded[url:, short_url_host:, short_url_token:]]
+            new(200, { url:, short_url: "https://#{short_url_host}/#{short_url_token}" }.to_json)
+          in Result::Ok[UrlManagement::Decode::OriginalFoundInCache[url:, short_url_host:, short_url_token:]]
+            new(200, { url:, short_url: "https://#{short_url_host}/#{short_url_token}" }.to_json)
           in Result::Ok[UrlManagement::Decode::OriginalWasNotFound[short_url]]
             new(
               422,

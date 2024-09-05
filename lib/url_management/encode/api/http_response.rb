@@ -14,8 +14,8 @@ module UrlManagement
 
         def self.from_encode_result(result)
           case result
-          in Result::Ok[UrlManagement::Encode::UrlWasEncoded[url:, short_url:]]
-            new(200, { url:, short_url: }.to_json)
+          in Result::Ok[UrlManagement::Encode::UrlWasEncoded[url:, short_host:, short_token:]]
+            new(200, { url:, short_url: "https://#{short_host}/#{short_token}" }.to_json)
           in Result::Err[UrlManagement::Encode::ValidationError => e]
             new(400, { error: { code: 'ValidationError', message: e } }.to_json)
           in Result::Err[UrlManagement::Encode::InfrastructureError => e]

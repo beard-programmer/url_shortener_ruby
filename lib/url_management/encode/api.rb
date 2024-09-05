@@ -14,8 +14,8 @@ module UrlManagement
       # @param [Logger] logger
       # @param [String] body
       # @return [HttpResponse]
-      def handle_http(db:, logger:, body:)
-        logger.info body
+      # @param [Object] event_publisher
+      def handle_http(db:, event_publisher:, logger:, body:)
         encode_request = Request.from_json(body)
 
         result = encode_request.and_then do |request|
@@ -25,6 +25,10 @@ module UrlManagement
             request:
           )
         end
+
+        # if result in Result::Ok[UrlWasEncoded => event]
+        #   event_publisher.publish(event)
+        # end
 
         HttpResponse.from_encode_result(result)
       end

@@ -3,6 +3,6 @@
 require "bundler/setup"
 Bundler.require
 
-require './server'
+require './app'
 
-run Server
+run App
