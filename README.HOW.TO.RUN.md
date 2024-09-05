@@ -3,8 +3,6 @@
 
 ## Prerequisites
 
-Before we begin, make sure you have the following installed on your system:
-
 1. **Docker**: This is required to run the PostgreSQL database using Docker Compose.
 2. **Ruby 3.3.4** 
 3. **Bundler**
