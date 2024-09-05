@@ -29,7 +29,6 @@ end
 
 gem "addressable"
 gem "json-schema"
-gem "moneta"
 gem "rack"
 gem "sequel"
 gem "sequel_pg", require: false
