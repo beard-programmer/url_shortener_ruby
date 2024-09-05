@@ -4,10 +4,13 @@ require 'logger'
 require 'sequel'
 require_relative '../../../spec_helper'
 require_relative '../../../../lib/url_management/decode/api'
+require_relative '../../../../lib/url_management/infrastructure/event_publisher'
 
 RSpec.describe UrlManagement::Decode::Api do
   describe '.handle_http' do
-    subject(:api_response) { described_class.handle_http(db:, logger: Logger.new(nil), body:) }
+    subject(:api_response) { described_class.handle_http(db:, event_publisher:, logger: Logger.new(nil), body:) }
+
+    let(:event_publisher) { UrlManagement::Infrastructure::EventPublisher.new }
 
     let(:db) do
       # Connect to the test database
@@ -67,7 +70,7 @@ RSpec.describe UrlManagement::Decode::Api do
         token_identity: 656_356_837
       },
       {
-        body: { short_url: "http://short.est/21112C" },
+        body: { short_url: "https://short.est/21112C" },
         original_url: 'http://sinatrarb.com/extensions.html',
         token_identity: 656_356_837
       },
@@ -82,7 +85,7 @@ RSpec.describe UrlManagement::Decode::Api do
         token_identity: 38_068_692_543
       },
       {
-        body: { short_url: "http://short.est/zzzzzz" },
+        body: { short_url: "https://short.est/zzzzzz" },
         original_url: 'https://github.com/sinatra/sinatra-recipes/blob/main/middleware/rack_parser.md',
         token_identity: 38_068_692_543
       }

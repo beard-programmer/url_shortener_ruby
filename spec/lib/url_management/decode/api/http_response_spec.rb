@@ -4,10 +4,14 @@ require_relative '../../../../../lib/url_management/decode/api/http_response'
 RSpec.describe UrlManagement::Decode::Api::HttpResponse do
   describe '.from_decode_result' do
     let(:found_url) { "https://example.com" }
-    let(:short_url) { "https://short.url" }
+    let(:short_url_host) { 'short.url' }
+    let(:short_url_token) { 'qwerty' }
+    let(:short_url) { "https://#{short_url_host}/#{short_url_token}" }
 
     context 'when the result is Ok with DecodedUrlWasFound' do
-      let(:result) { Result.ok(UrlManagement::Decode::ShortUrlDecoded.new(found_url, short_url)) }
+      let(:result) do
+        Result.ok(UrlManagement::Decode::ShortUrlDecoded.new(found_url, short_url_host, short_url_token))
+      end
 
       it 'returns a 200 status with the correct body' do
         response = described_class.from_decode_result(result)
