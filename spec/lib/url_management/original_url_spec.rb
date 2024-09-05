@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../../spec_helper'
+require_relative '../../../lib/url_management/infrastructure'
 
 RSpec.describe UrlManagement::OriginalUrl do
-  let(:string_to_uri) { ->(s) { Infrastructure.parse_url_string(s) } }
+  let(:string_to_uri) { ->(s) { UrlManagement::Infrastructure.parse_url_string(s) } }
 
   describe '.from_string' do
     context 'when the URL is valid' do
