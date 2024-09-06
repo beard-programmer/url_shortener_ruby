@@ -30,7 +30,8 @@ module UrlManagement
       def self.save_encoded_url(db, encoded_url)
         return Result.err DatabaseError.new unless encoded_url.is_a? UrlManagement::Encode::EncodedUrlStandard
 
-        db[:encoded_urls].insert(token_identifier: encoded_url.token.token_key, url: encoded_url.url.to_s)
+        db[:encoded_urls].disable_insert_returning.insert(token_identifier: encoded_url.token.token_key,
+                                                          url: encoded_url.url.to_s)
         Result.ok true
       rescue Sequel::Error => e
         Result.err DatabaseError.new(e.detailed_message)

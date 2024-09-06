@@ -20,7 +20,7 @@ module UrlManagement
             new(400, { error: { code: 'ValidationError', message: e } }.to_json)
           in Result::Err[UrlManagement::Encode::InfrastructureError => e]
             new(500, { error: { code: 'InfrastructureError', message: e } }.to_json)
-          else raise 'Unexpected encode result'
+          else raise "Unexpected encode result #{result.unwrap_err!}"
           end
         end
 

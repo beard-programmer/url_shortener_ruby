@@ -13,8 +13,7 @@ module UrlManagement
       # @param [Logger] logger
       # @param [String] body
       # @return [HttpResponse]
-      # @param [Object] event_publisher
-      def handle_http(db:, event_publisher:, logger:, body:)
+      def handle_http(db:, logger:, body:)
         decode_request = Request.from_json(body)
 
         result = decode_request.and_then do |request|
