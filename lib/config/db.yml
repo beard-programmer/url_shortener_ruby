@@ -4,6 +4,7 @@ development:
   password: url_shortener_ruby_development
   host: localhost
   database: url_shortener_ruby_development
+  port: 5432
 
 test:
   adapter: postgres
@@ -11,3 +12,4 @@ test:
   password: url_shortener_ruby_test
   host: localhost
   database: url_shortener_ruby_test
+  port: 5433

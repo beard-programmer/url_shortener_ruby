@@ -1,0 +1,16 @@
+development:
+  adapter: postgres
+  user: ticket_service_development
+  password: ticket_service_development
+  host: localhost
+  database: ticket_service_development
+  port: 5434
+
+
+test:
+  adapter: postgres
+  user: ticket_service_test
+  password: ticket_service_test
+  host: localhost
+  database: ticket_service_test
+  port: 5435

@@ -8,6 +8,7 @@ module UrlManagement
   class Api < Sinatra::Base
     helpers do
       def db = settings.db
+      def ticket_service_db = settings.ticket_service_db
     end
 
     before do
@@ -21,7 +22,7 @@ module UrlManagement
     end
 
     post '/encode' do
-      response = Encode::Api.handle_http(db:, logger:, body: request.body.read)
+      response = Encode::Api.handle_http(db:, ticket_service_db:, logger:, body: request.body.read)
       [response.http_status_code, response.body]
     end
 

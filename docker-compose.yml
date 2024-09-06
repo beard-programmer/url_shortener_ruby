@@ -1,15 +1,15 @@
 services:
   db:
     image: postgres:latest
-    volumes:
-      - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: url_shortener_ruby_development
       POSTGRES_PASSWORD: url_shortener_ruby_development
       POSTGRES_DB: url_shortener_ruby_development
     ports:
       - "5432:5432"
-  test_db:
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  db_test:
     image: postgres:latest
     environment:
       POSTGRES_USER: url_shortener_ruby_test
@@ -18,7 +18,29 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - test_postgres_data:/var/lib/postgresql/data
+      - db_test_data:/var/lib/postgresql/data
+  ticket_service_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ticket_service_development
+      POSTGRES_PASSWORD: ticket_service_development
+      POSTGRES_DB: ticket_service_development
+    ports:
+      - "5434:5432"
+    volumes:
+      - ticket_service_db_data:/var/lib/postgresql/data
+  ticket_service_db_test:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ticket_service_test
+      POSTGRES_PASSWORD: ticket_service_test
+      POSTGRES_DB: ticket_service_test
+    ports:
+      - "5435:5432"
+    volumes:
+      - ticket_service_db_test_data:/var/lib/postgresql/data
 volumes:
   db_data:
-  test_postgres_data:
+  db_test_data:
+  ticket_service_db_data:
+  ticket_service_db_test_data:

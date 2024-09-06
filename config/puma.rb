@@ -17,8 +17,10 @@ preload_app!
 
 before_fork do
   UrlManagement::Api.db.disconnect
+  UrlManagement::Api.ticket_service_db.disconnect
 end
 
 on_worker_boot do
   UrlManagement::Api.db.disconnect
+  UrlManagement::Api.ticket_service_db.disconnect
 end

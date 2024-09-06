@@ -17,7 +17,7 @@ module UrlManagement
       # Very predictable. Can have multiple sequences with some big step
       # @todo: forbid setval.
       def self.produce_unique_integer(db)
-        f = Sequel.function(:nextval, 'identity_system.token_identifier')
+        f = Sequel.function(:nextval, 'token_identifier')
         Result.ok db.get(f)
       rescue Sequel::Error => e
         Result.err TokenSystemError.new(e)
