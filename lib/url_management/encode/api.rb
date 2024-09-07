@@ -11,14 +11,13 @@ module UrlManagement
       module_function
 
       # @param [Sequel::Database] db
-      # @param [Sequel::Database] ticket_service_db
+      # @param [#call] ticket_provider
       # @param [Logger] logger
       # @param [String] body
       # @return [HttpResponse]
-      def handle_http(db:, ticket_service_db:, logger:, body:)
+      def handle_http(db:, ticket_provider:, logger:, body:)
         encode_request = Request.from_json(body)
 
-        ticket_provider = -> { Infrastructure::PostgresIdentifierProvider.produce_unique_integer(ticket_service_db) }
         result = encode_request.and_then do |request|
           Encode.call(
             ticket_provider,
@@ -26,6 +25,8 @@ module UrlManagement
             request:
           )
         end
+
+        logger.debug result
 
         HttpResponse.from_encode_result(result)
       end

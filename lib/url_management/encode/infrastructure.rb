@@ -4,6 +4,7 @@ require 'sequel'
 require_relative '../../common/result'
 require_relative '../infrastructure'
 require_relative './infrastructure/postgres_identifier_provider'
+require_relative './infrastructure/redis_identifier_provider'
 
 module UrlManagement
   module Encode

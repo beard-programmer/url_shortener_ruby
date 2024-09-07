@@ -39,8 +39,20 @@ services:
       - "5435:5432"
     volumes:
       - ticket_service_db_test_data:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./lib/config/redis.conf:/usr/local/etc/redis/redis.conf  # Mount redis.conf from config
+      - redis_data:/data
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]  # Use custom redis.conf
+    restart: always
 volumes:
   db_data:
   db_test_data:
   ticket_service_db_data:
   ticket_service_db_test_data:
+  redis_data:
+    driver: local
