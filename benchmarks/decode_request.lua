@@ -1,51 +1,32 @@
--- Define the character set for Base58
+-- Define the Base58 alphabet
 local ALPHABET_BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+local BASE58 = 58
 
--- Convert the Base58 alphabet to a character table
-local charset = {}
-for i = 1, #ALPHABET_BASE58 do
-    charset[i] = ALPHABET_BASE58:sub(i, i)
-end
+-- Function to encode an integer into a Base58 string
+local function encode(key)
+    local encoded = ""
 
--- Function to convert a number to Base58 representation
-local function numberToBase58(n)
-    local result = ""
-    while n > 0 do
-        local remainder = (n - 1) % 58
-        result = charset[remainder + 1] .. result
-        n = math.floor((n - remainder) / 58)
+    -- Perform Base58 encoding
+    while key > 0 do
+        local remainder = key % BASE58
+        encoded = ALPHABET_BASE58:sub(remainder + 1, remainder + 1) .. encoded
+        key = math.floor(key / BASE58)
     end
-    return result
+
+    return encoded
 end
 
--- Function to generate sequential Base58 strings
-local function generateBase58Sequence(start, count)
-    local results = {}
-    for i = start, start + count - 1 do
-        table.insert(results, numberToBase58(i))
-    end
-    return results
-end
-
--- Initialize Base58 sequence
-local startIndex = 1
-local numberOfItems = 10500100  -- Number of sequences to generate
-local base58Values = generateBase58Sequence(startIndex, numberOfItems)
+-- Example usage
+local integer_to_encode = 657508406
+local base58_string = encode(integer_to_encode)
 
 -- Counter for Base58 values
-local counter = 1
+local counter = 0
 
 -- Function to generate HTTP request with sequential Base58 values
 request = function()
-    -- Generate the current suffix using the counter
-    local suffix = base58Values[counter]
-
-    -- Increment counter for the next request
+    local suffix = encode(integer_to_encode + counter)
     counter = counter + 1
-    if counter > #base58Values then
-        counter = 1  -- Loop back to the beginning if needed
-    end
-
     -- Create the HTTP request body
     local body = '{"short_url": "https://short.est/' .. suffix .. '"}'
 

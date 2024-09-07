@@ -12,7 +12,7 @@ class App < Sinatra::Base
 
     db = Sequel.connect(
       YAML.load_file("./lib/config/db.yml")[environment],
-      max_connections: [(ENV.fetch('PUMA_WORKERS', 10).to_i * ENV.fetch('PUMA_MAX_THREADS', 32).to_i), 100].min / 2,
+      max_connections: [(1 * ENV.fetch('PUMA_MAX_THREADS', 32).to_i), 100].min,
       logger:,
       sql_log_level: :debug
     ) # raises in failure
@@ -22,7 +22,7 @@ class App < Sinatra::Base
 
     ticket_service_db = Sequel.connect(
       YAML.load_file("./lib/config/ticket_service.yml")[environment],
-      max_connections: [(ENV.fetch('PUMA_WORKERS', 10).to_i * ENV.fetch('PUMA_MAX_THREADS', 32).to_i), 100].min / 2,
+      max_connections: [(1 * ENV.fetch('PUMA_MAX_THREADS', 32).to_i), 100].min,
       logger:,
       sql_log_level: :debug
     ) # raises in failure
