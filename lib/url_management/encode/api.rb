@@ -18,9 +18,10 @@ module UrlManagement
       def handle_http(db:, ticket_service_db:, logger:, body:)
         encode_request = Request.from_json(body)
 
+        ticket_provider = -> { Infrastructure::PostgresIdentifierProvider.produce_unique_integer(ticket_service_db) }
         result = encode_request.and_then do |request|
           Encode.call(
-            -> { Infrastructure.produce_unique_integer(ticket_service_db) },
+            ticket_provider,
             ->(url) { Infrastructure.save_encoded_url(db, url) },
             request:
           )

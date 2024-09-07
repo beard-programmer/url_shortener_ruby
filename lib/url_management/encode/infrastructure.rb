@@ -3,25 +3,13 @@
 require 'sequel'
 require_relative '../../common/result'
 require_relative '../infrastructure'
+require_relative './infrastructure/postgres_identifier_provider'
 
 module UrlManagement
   module Encode
     module Infrastructure
       def self.codec_base58 = UrlManagement::Infrastructure::CodecBase58
       def self.parse_url_string(...) = UrlManagement::Infrastructure.parse_url_string(...)
-
-      class TokenSystemError < StandardError; end
-
-      # @param [Sequel::Database, #get] db
-      # @return [Result::Ok<Integer>, Result::Err<TokenSystemError>]
-      # Very predictable. Can have multiple sequences with some big step
-      # @todo: forbid setval.
-      def self.produce_unique_integer(db)
-        f = Sequel.function(:nextval, 'token_identifier')
-        Result.ok db.get(f)
-      rescue Sequel::Error => e
-        Result.err TokenSystemError.new(e)
-      end
 
       class DatabaseError < StandardError; end
 
