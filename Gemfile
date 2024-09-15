@@ -32,3 +32,7 @@ gem "json-schema"
 gem "rack"
 gem "sequel"
 gem "sequel_pg", require: false
+
+gem "redis", "~> 5.3"
+
+gem "connection_pool", "~> 2.4"

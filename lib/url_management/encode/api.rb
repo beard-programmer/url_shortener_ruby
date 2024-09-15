@@ -11,24 +11,22 @@ module UrlManagement
       module_function
 
       # @param [Sequel::Database] db
+      # @param [#call] ticket_provider
       # @param [Logger] logger
       # @param [String] body
       # @return [HttpResponse]
-      # @param [Object] event_publisher
-      def handle_http(db:, event_publisher:, logger:, body:)
+      def handle_http(db:, ticket_provider:, logger:, body:)
         encode_request = Request.from_json(body)
 
         result = encode_request.and_then do |request|
           Encode.call(
-            -> { Infrastructure.produce_unique_integer(db) },
+            ticket_provider,
             ->(url) { Infrastructure.save_encoded_url(db, url) },
             request:
           )
         end
 
-        # if result in Result::Ok[UrlWasEncoded => event]
-        #   event_publisher.publish(event)
-        # end
+        logger.debug result
 
         HttpResponse.from_encode_result(result)
       end

@@ -16,10 +16,10 @@ end
 namespace :db do
   desc "Run Sequel migrations"
   task :migrate do
-    db_config = YAML.load_file("lib/config/database.yml")
+    db_config = YAML.load_file("lib/config/db.yml")
     environment = ENV["APP_ENV"] || "development"
     db = Sequel.connect(db_config[environment])
-    Sequel::Migrator.run(db, "lib/db/migrations")
+    Sequel::Migrator.run(db, "lib/db/migrations/db")
 
     puts "Migrations executed for #{environment} environment."
   rescue StandardError => e
@@ -29,10 +29,38 @@ namespace :db do
 
   desc "Rollback Sequel migrations"
   task :rollback do
-    db_config = YAML.load_file("lib/config/database.yml")
+    db_config = YAML.load_file("lib/config/db.yml")
     environment = ENV["APP_ENV"] || "development"
     db = Sequel.connect(db_config[environment])
-    Sequel::Migrator.run(db, "lib/db/migrations", target: 0)
+    Sequel::Migrator.run(db, "lib/db/migrations/db", target: 0)
+
+    puts "Migrations rolled back for #{environment} environment."
+  rescue StandardError => e
+    p("Rake migration aborted")
+    p(e)
+  end
+end
+
+namespace :ticket_service_db do
+  desc "Run Sequel migrations"
+  task :migrate do
+    db_config = YAML.load_file("lib/config/ticket_service.yml")
+    environment = ENV["APP_ENV"] || "development"
+    db = Sequel.connect(db_config[environment])
+    Sequel::Migrator.run(db, "lib/db/migrations/ticket_service")
+
+    puts "Migrations executed for #{environment} environment."
+  rescue StandardError => e
+    p("Rake migration aborted")
+    p(e)
+  end
+
+  desc "Rollback Sequel migrations"
+  task :rollback do
+    db_config = YAML.load_file("lib/config/ticket_service.yml")
+    environment = ENV["APP_ENV"] || "development"
+    db = Sequel.connect(db_config[environment])
+    Sequel::Migrator.run(db, "lib/db/ticket_service/migrations", target: 0)
 
     puts "Migrations rolled back for #{environment} environment."
   rescue StandardError => e

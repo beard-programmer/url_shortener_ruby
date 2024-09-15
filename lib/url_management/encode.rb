@@ -40,7 +40,7 @@ module UrlManagement
         persist.call(encoded_url)
       end
 
-      return save_encoded_url if save_encoded_url.err?
+      return save_encoded_url.map_err { |e| InfrastructureError.new(e) } if save_encoded_url.err?
 
       encode_url.map do |encoded_url|
         token = encoded_url.token
